@@ -111,9 +111,6 @@
             grade.remove()
         }
 
-        let answerExplanation = document.createElement("code")
-        answerExplanation.appendChild(document.createTextNode("{{answerExplanation}}"))
-
         let continueForm = document.createElement("form")
         continueForm.setAttribute("method", "post")
         continueForm.setAttribute("action", "/question")
@@ -145,10 +142,6 @@
         continueForm.appendChild(newIncorrect)
         continueForm.appendChild(submitBtn)
 
-        document.body.appendChild(answerExplanation)
-        for (let _ = 0; _ < 4; _++) {
-            document.body.appendChild(document.createElement("br"))
-        }
         document.body.appendChild(continueForm)
     }
 

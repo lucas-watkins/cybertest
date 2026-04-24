@@ -40,6 +40,7 @@ file(GLOB TEMPLATES "web/templates/*.*")
 message(NOTICE "Web Templates: ${TEMPLATES}")
 file(COPY ${TEMPLATES} DESTINATION web/templates/)
 
-add_executable(cybertest src/main.cpp src/validation.cpp)
+add_executable(cybertest src/main.cpp src/validation.cpp
+        src/questiongenerator.cpp)
 target_include_directories(cybertest PRIVATE include)
 target_link_libraries(cybertest PRIVATE OpenXLSX::OpenXLSX Crow::Crow)
