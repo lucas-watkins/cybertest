@@ -5,6 +5,7 @@
 #include <questiongenerator.hpp>
 #include <cstdint>
 #include <random>
+#include <ranges>
 
 std::optional<QuestionGenerator::Question> QuestionGenerator::next() const {
     try {
@@ -13,7 +14,7 @@ std::optional<QuestionGenerator::Question> QuestionGenerator::next() const {
         const std::uint16_t sheets{static_cast<std::uint16_t>(workbook.worksheetCount())};
         std::uniform_int_distribution<std::uint16_t> sheets_possible{1U, sheets};
 
-        OpenXLSX::XLWorksheet sheet {workbook.worksheet(sheets_possible(mt_engine))};
+        const OpenXLSX::XLWorksheet sheet {workbook.worksheet(sheets_possible(mt_engine))};
 
         OpenXLSX::XLColumn first_col{sheet.column(1)};
 
@@ -50,5 +51,40 @@ std::optional<QuestionGenerator::Question> QuestionGenerator::next() const {
     } catch (const OpenXLSX::XLException& ex) {
         std::cerr << "XLException: " << ex.what() << '\n';
         return std::nullopt;
+    }
+}
+
+void QuestionGenerator::Question::shuffle() {
+    std::vector answers{answer_a, answer_b, answer_c, answer_d};
+    std::ranges::shuffle(answers, mt_engine);
+
+    answer_a = answers[0];
+    answer_b = answers[1];
+    answer_c = answers[2];
+    answer_d = answers[3];
+
+    for (std::size_t i{0}; i < answers.size(); ++i) {
+        if (answers[i] == correct_answer) {
+            switch (i) {
+                case 0:
+                correct_answer = "answerA";
+                break;
+
+                case 1:
+                correct_answer = "answerB";
+                break;
+
+                case 2:
+                correct_answer = "answerC";
+                break;
+
+                case 3:
+                correct_answer = "answerD";
+                break;
+
+                default:
+                throw std::runtime_error("Shuffling answer choices failed");
+            }
+        }
     }
 }

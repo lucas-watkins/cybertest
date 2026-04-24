@@ -21,6 +21,8 @@ public:
         std::string answer_b;
         std::string answer_c;
         std::string answer_d;
+
+        void shuffle();
     };
 
     QuestionGenerator(const std::string& file) : xl_doc{file} {};

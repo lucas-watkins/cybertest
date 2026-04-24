@@ -53,6 +53,8 @@ int main() {
             return crow::mustache::compile("Server Error: Failure to get question...").render();
         }
 
+        question->shuffle();
+
         crow::mustache::context ctx{};
         ctx["questionNum"] = *question_num;
         ctx["incorrect"] = *incorrect;
@@ -62,7 +64,7 @@ int main() {
         ctx["answerB"] = question->answer_b;
         ctx["answerC"] = question->answer_c;
         ctx["answerD"] = question->answer_d;
-        ctx["correctAnswer"] = "answerA";
+        ctx["correctAnswer"] = question->correct_answer;
 
         const crow::mustache::template_t page{crow::mustache::load("question.html")};
 
