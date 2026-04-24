@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 4.2)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+cmake_minimum_required(VERSION 3.3)
 project(cybertest)
 include(FetchContent)
 
 set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
 FetchContent_Declare(
