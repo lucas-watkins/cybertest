@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AP Cybersecurity CK Test</title>
+</head>
+<body>
+<code id="question">{{question}}</code><br><br><br><br>
+<input type="radio" name="answerChoice" id="answerA">
+<label for="answerA"><code>{{answerA}}</code></label><br><br>
+<input type="radio" name="answerChoice" id="answerB">
+<label for="answerB"><code>{{answerB}}</code></label><br><br>
+<input type="radio" name="answerChoice" id="answerC">
+<label for="answerC"><code>{{answerC}}</code></label><br><br>
+<input type="radio" name="answerChoice" id="answerD">
+<label for="answerD"><code>{{answerD}}</code></label><br><br>
+<button id="progressButton" onclick="checkAnswer()">Check</button><br><br>
+
+<script>
+    let questionNum = {{questionNum}}
+    let correct = {{correct}}
+    let incorrect = {{incorrect}}
+
+    if (questionNum <= 0) {
+        document.getElementById("question").remove()
+
+        let answerChoices = document.getElementsByName("answerChoice")
+        for (let i = 0; i < answerChoices.length; i++){
+            answerChoices[i].remove()
+            i--
+        }
+
+        let labels = document.getElementsByTagName("label")
+        for (let i = 0; i < labels.length; i++){
+            labels[i].remove()
+            i--
+        }
+
+        let breaks = document.getElementsByTagName("br")
+        for (let i = 0; i < breaks.length; i++){
+            breaks[i].remove()
+            i--
+        }
+
+        document.getElementById("progressButton").remove()
+
+        let grade = document.createElement("p")
+        grade.appendChild(
+            document.createTextNode(
+                `Your Grade: ${correct}/${correct + incorrect} (${((correct/(correct + incorrect)) * 100).toFixed(2)}%)`
+            )
+        )
+        document.body.appendChild(grade)
+        document.body.appendChild(document.createElement("br"))
+        let home = document.createElement("button")
+        home.setAttribute("onclick", "window.location.replace(\"/\")")
+        home.innerText = "Home"
+        document.body.appendChild(home)
+    }
+
+    if (questionNum > 0) {
+        document.title = `Question ${correct + incorrect + 1}/${correct + incorrect + questionNum}`
+        let grade = document.createElement("code")
+        grade.setAttribute("id", "grade")
+        if (correct + incorrect > 0) {
+            grade.appendChild(
+                document.createTextNode(
+                    `Score: ${correct}/${correct + incorrect}`
+                )
+            )
+        }
+        document.body.appendChild(grade)
+    }
+
+    function checkAnswer(){
+        let choices = document.getElementsByName("answerChoice")
+        let choice = null;
+
+        for (let i = 0; i < choices.length; i++) {
+            if (choices[i].checked){
+                choice = choices[i].id
+            }
+        }
+
+        if (choice == null) {
+            alert("Please answer the question")
+            return
+        }
+
+        let choiceElement = document.getElementById(choice)
+
+        let answeredCorrectly = null
+
+        answeredCorrectly = choice === "{{correctAnswer}}";
+
+        let labels = document.getElementsByTagName("label")
+        for (let i = 0; i < labels.length; i++){
+            if (labels[i].htmlFor === "{{correctAnswer}}") {
+                labels[i].style.backgroundColor = "#99ff99"
+            }
+
+            if (!answeredCorrectly && labels[i].htmlFor === choiceElement.id) {
+                labels[i].style.backgroundColor = "#ff6666"
+            }
+        }
+
+        let button = document.getElementById("progressButton")
+        button.remove()
+
+        let grade = document.getElementById("grade")
+        if (grade != null) {
+            grade.remove()
+        }
+
+        let answerExplanation = document.createElement("code")
+        answerExplanation.appendChild(document.createTextNode("{{answerExplanation}}"))
+
+        let continueForm = document.createElement("form")
+        continueForm.setAttribute("method", "post")
+        continueForm.setAttribute("action", "/question")
+
+        let newCorrect = document.createElement("input")
+        newCorrect.setAttribute("hidden", null)
+        newCorrect.setAttribute("readonly", null)
+        newCorrect.setAttribute("name", "correct")
+        newCorrect.setAttribute("value", (answeredCorrectly ? correct + 1 : correct).toString())
+
+        let newIncorrect = document.createElement("input")
+        newIncorrect.setAttribute("hidden", null)
+        newIncorrect.setAttribute("readonly", null)
+        newIncorrect.setAttribute("name", "incorrect")
+        newIncorrect.setAttribute("value", (!answeredCorrectly ? incorrect + 1 : incorrect).toString())
+
+        let newQuestionNum = document.createElement("input")
+        newQuestionNum.setAttribute("hidden", null)
+        newQuestionNum.setAttribute("readonly", null)
+        newQuestionNum.setAttribute("name", "questionNum")
+        newQuestionNum.setAttribute("value", (questionNum - 1).toString())
+
+        let submitBtn = document.createElement("input")
+        submitBtn.setAttribute("type", "submit")
+        submitBtn.setAttribute("value", "Continue")
+
+        continueForm.appendChild(newQuestionNum)
+        continueForm.appendChild(newCorrect)
+        continueForm.appendChild(newIncorrect)
+        continueForm.appendChild(submitBtn)
+
+        document.body.appendChild(answerExplanation)
+        for (let _ = 0; _ < 4; _++) {
+            document.body.appendChild(document.createElement("br"))
+        }
+        document.body.appendChild(continueForm)
+    }
+
+</script>
+
+</body>
+</html>

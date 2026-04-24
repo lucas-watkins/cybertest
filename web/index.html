@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AP Cybersecurity CK Test</title>
+</head>
+<body>
+
+<h1>Start a Practice Test</h1>
+<form id="questionForm" method="post" action="/question">
+    <label for="questionNum">Questions: </label>
+    <input id="questionNum" type="number" name="questionNum" value="10" min="1" required/>
+    <input id="correct" type="number" name="correct" value="0" min="0" readonly hidden required/>
+    <input id="incorrect" type="number" name="incorrect" value="0" min="0" readonly hidden required/>
+
+    <input type="submit" value="Go">
+</form>
+</body>
+</html>
