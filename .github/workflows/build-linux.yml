@@ -1,0 +1,26 @@
+name: Build (Linux)
+on: push
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get repository code
+        uses: actions/checkout@v6
+
+      - name: Release Build With Cmake
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -S $PWD -B cmake-build-release
+          cmake --build cmake-build-release
+
+      - name: Make a Zip
+        run: |
+          mkdir cybertest-release
+          cp -r cmake-build-release/web cybertest-release/
+          cp cmake-build-release/cybertest cybertest-release/cybertest
+
+      - name: Upload Release Build
+        uses: actions/upload-artifact@v6
+        with:
+          name: "cybertest-release"
+          path: "cybertest-release"
