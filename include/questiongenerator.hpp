@@ -11,7 +11,7 @@ class QuestionGenerator {
     inline static std::seed_seq seed_seq{rd(), rd(), rd(), rd(), rd()};
     inline static std::mt19937 mt_engine{seed_seq};
 
-    OpenXLSX::XLDocument xl_doc;
+    std::string xl_file;
 
 public:
     struct Question {
@@ -25,7 +25,7 @@ public:
         void shuffle();
     };
 
-    QuestionGenerator(const std::string& file) : xl_doc{file} {};
+    QuestionGenerator(std::string file) : xl_file{std::move(file)} {};
 
     ~QuestionGenerator() = default;
 

@@ -9,14 +9,15 @@
 
 std::optional<QuestionGenerator::Question> QuestionGenerator::next() const {
     try {
+        OpenXLSX::XLDocument xl_doc;
+        xl_doc.open(xl_file);
+
         OpenXLSX::XLWorkbook workbook {xl_doc.workbook()};
 
-        const std::uint16_t sheets{static_cast<std::uint16_t>(workbook.worksheetCount())};
-        std::uniform_int_distribution<std::uint16_t> sheets_possible{1U, sheets};
+        const std::uint32_t sheets{ workbook.worksheetCount() };
+        std::uniform_int_distribution sheets_possible{1U, sheets};
 
         const OpenXLSX::XLWorksheet sheet {workbook.worksheet(sheets_possible(mt_engine))};
-
-        OpenXLSX::XLColumn first_col{sheet.column(1)};
 
         std::uint32_t question_cell{0};
 
